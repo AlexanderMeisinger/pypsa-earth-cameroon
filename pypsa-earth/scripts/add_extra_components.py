@@ -299,6 +299,7 @@ if __name__ == "__main__":
 
     attach_storageunits(n, costs, config)
     attach_stores(n, costs, config)
+    attach_electricity_export(n, config)
     attach_hydrogen_pipelines(n, costs, config)
 
     add_nice_carrier_names(n, config=snakemake.config)
