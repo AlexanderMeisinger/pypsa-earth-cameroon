@@ -236,6 +236,40 @@ def attach_electricity_export(n, config):
             location="Earth",
         )
 
+        # add export links
+        n.madd(
+            "Link",
+            names=n.buses.index[~n.buses.index.str.contains("H2|battery")] + " export",
+            bus0=n.buses.index[~n.buses.index.str.contains("H2|battery")],
+            bus1="Electricity export bus",
+            carrier="export",
+            p_nom_extendable=True,
+        )
+
+        # add store depending on config settings
+        n.add(
+            "Store",
+            "Electricity export store",
+            bus="Electricity export bus",
+            carrier="export",
+            e_nom_extendable=True,
+            e_initial=0,  # actually not required, since e_cyclic=True
+            marginal_cost=0,
+            capital_cost=0,
+            e_cyclic=True,
+        )
+
+        # add load
+        n.add(
+            "Load",
+            "Electricity export load",
+            bus="Electricity export bus",
+            carrier="export",
+            p_set=config["electricity-export"]["export_demand"]/8760 #to be clarified
+        )
+    else:
+        logger.info("No export electricity")
+
 
 def attach_hydrogen_pipelines(n, costs, config):
     elec_opts = config["electricity"]
@@ -299,8 +333,8 @@ if __name__ == "__main__":
 
     attach_storageunits(n, costs, config)
     attach_stores(n, costs, config)
-    attach_electricity_export(n, config)
     attach_hydrogen_pipelines(n, costs, config)
+    attach_electricity_export(n, config)
 
     add_nice_carrier_names(n, config=snakemake.config)
 
