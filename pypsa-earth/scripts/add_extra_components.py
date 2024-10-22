@@ -225,6 +225,18 @@ def attach_stores(n, costs, config):
         )
 
 
+def attach_electricity_export(n, config): 
+    if config["electricity-export"]["electricity-export"]:
+        logger.info("Adding export electricity. Demand: %s MWh", abs(config["electricity-export"]["export_demand"]))
+        # add export bus
+        n.add(
+            "Bus",
+            "Electricity export bus",
+            carrier="export",
+            location="Earth",
+        )
+
+
 def attach_hydrogen_pipelines(n, costs, config):
     elec_opts = config["electricity"]
     ext_carriers = elec_opts["extendable_carriers"]
