@@ -227,13 +227,15 @@ def attach_stores(n, costs, config):
 
 def attach_electricity_export(n, config): 
     if config["electricity-export"]["electricity-export"]:
-        logger.info("Adding export electricity. Demand: %s MWh", abs(config["electricity-export"]["export_demand"]))
+        logger.info("Adding export electricity. Demand: %s TWh", abs(config["electricity-export"]["export_demand"]))
         # add export bus
         n.add(
             "Bus",
             "Electricity export bus",
             carrier="export",
             location="Earth",
+            x=39.658871+2,
+            y=-4.043740,
         )
 
         # add export links
@@ -259,13 +261,22 @@ def attach_electricity_export(n, config):
             e_cyclic=True,
         )
 
+        # export profile
+        export_el = config["electricity-export"]["export_demand"] * 1e6  # convert TWh to MWh
+        export_profile = export_el / 8760
+        snapshots = pd.date_range(freq="h", **snakemake.params.snapshots)
+        export_profile = pd.Series(export_profile, index=snapshots)
+        # Resample to temporal resolution defined in wildcard "sopts" with pandas resample
+        sopts = config["scenario"]["opts"][0].split("-")
+        export_profile = export_profile.resample(sopts[1].casefold()).mean()
+
         # add load
         n.add(
             "Load",
             "Electricity export load",
             bus="Electricity export bus",
             carrier="export",
-            p_set=config["electricity-export"]["export_demand"]/8760 #to be clarified
+            p_set=export_profile 
         )
     else:
         logger.info("No export electricity")
