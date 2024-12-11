@@ -148,7 +148,9 @@ load_options:
   ssp: "ssp2-2.6" # shared socio-economic pathway (GDP and population growth) scenario to consider
   weather_year: 2013 # Load scenarios available with different weather year (different renewable potentials)
   prediction_year: 2030 # Load scenarios available with different prediction year (GDP, population)
-  scale: 1 # scales all load time-series, i.e. 2 = doubles load
+  scale: 2.79 # scales all load time-series, i.e. 2 = doubles load 
+  # Current demand 12,20126 TWh
+  # 2030 demand: 34 TWh
 
 electricity:
   base_voltage: 380.
