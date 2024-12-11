@@ -45,7 +45,7 @@ scenario:
   simpl: [""]
   ll: ["copt"]
   clusters: [8]
-  opts: [Co2L1-1H] #Ziel: THG-Grenzwert von max. 3,4 kg CO2-äq/kg H2
+  opts: [Co2L1-1H]
   planning_horizons: # investment years for myopic and perfect; or costs year for overnight
   - 2030
   sopts:
@@ -53,10 +53,10 @@ scenario:
   demand:
   - "AB"
 
-# definition of electricity export option 
+  # definition of electricity export option 
 electricity-export:
   electricity-export: True # True: Consider electricity export option, False: No electricity export option
-  export_demand: 9 # Electricity export in TWh # Ziel: H2-Nachfrage Deutschland: Ca. 100 TWh; Ca. 60 % Import => 60 TWh H2 Import Bedarf ()
+  export_demand: 9 # 0.9 # 9 Electricity export in TWh
 
 snapshots:
   start: "2013-01-01"
@@ -148,9 +148,7 @@ load_options:
   ssp: "ssp2-2.6" # shared socio-economic pathway (GDP and population growth) scenario to consider
   weather_year: 2013 # Load scenarios available with different weather year (different renewable potentials)
   prediction_year: 2030 # Load scenarios available with different prediction year (GDP, population)
-  scale: 2.79 # scales all load time-series, i.e. 2 = doubles load 
-  # Current demand 12,20126 TWh
-  # 2030 demand: 34 TWh
+  scale: 2.79 # scales all load time-series, i.e. 2 = doubles load
 
 electricity:
   base_voltage: 380.
